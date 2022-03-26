@@ -1,15 +1,11 @@
 package sysinit
 
 import (
-	"fmt"
 	"io/ioutil"
-	"log"
-
 	"k8s.io/api/networking/v1"
+	"log"
 	"sigs.k8s.io/yaml"
 )
-
-var SysConfig = new(SysConfigStruct)
 
 type Server struct {
 	Port int //代表是代理启动端口
@@ -18,6 +14,8 @@ type SysConfigStruct struct {
 	Server  Server
 	Ingress []v1.Ingress
 }
+
+var SysConfig = new(SysConfigStruct)
 
 func InitConfig() {
 	config, err := ioutil.ReadFile("./app.yaml")
@@ -28,6 +26,6 @@ func InitConfig() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	fmt.Println(SysConfig.Ingress)
 	ParseRule()
+
 }

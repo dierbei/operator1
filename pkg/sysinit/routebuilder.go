@@ -1,12 +1,11 @@
 package sysinit
 
 import (
-	"net/http"
-
 	"github.com/gorilla/mux"
+	"net/http"
 )
 
-//MyRouter route构建器，build 方法必须要执行
+//route构建器， build 方法必须要执行
 var MyRouter *mux.Router
 
 func init() {
@@ -21,26 +20,25 @@ func NewRouteBuilder() *RouteBuilder {
 	return &RouteBuilder{route: MyRouter.NewRoute()}
 }
 
-func (r *RouteBuilder) SetPath(path string, exact bool) *RouteBuilder {
+func (this *RouteBuilder) SetPath(path string, exact bool) *RouteBuilder {
+
 	if exact {
-		r.route.Path(path)
+		this.route.Path(path)
 	} else {
-		r.route.PathPrefix(path)
+		this.route.PathPrefix(path)
 	}
-	return r
+	return this
 }
 
-// SetHost 第二个参数是故意的，方便调用时 传入 条件，省的外面写 if else
-func (r *RouteBuilder) SetHost(host string, set bool) *RouteBuilder {
+//第二个参数是故意的，方便调用时 传入 条件，省的外面写 if else
+func (this *RouteBuilder) SetHost(host string, set bool) *RouteBuilder {
 	if set {
-		r.route.Host(host)
+		this.route.Host(host)
 	}
-	return r
+	return this
 }
-
-// Build 构建
-func (r *RouteBuilder) Build(handler http.Handler) {
-	r.route.
+func (this *RouteBuilder) Build(handler http.Handler) {
+	this.route.
 		Methods("GET", "POST", "PUT", "DELETE", "OPTIONS").
 		Handler(handler)
 }

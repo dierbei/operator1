@@ -6,6 +6,7 @@ require (
 	github.com/gorilla/mux v1.8.0
 	github.com/valyala/fasthttp v1.34.0
 	github.com/yeqown/fasthttp-reverse-proxy/v2 v2.2.2
+	github.com/yeqown/log v1.1.1
 	k8s.io/api v0.23.5
 	sigs.k8s.io/yaml v1.3.0
 )
@@ -24,7 +25,6 @@ require (
 	github.com/pkg/errors v0.9.1 // indirect
 	github.com/savsgio/gotils v0.0.0-20200608150037-a5f6f5aef16c // indirect
 	github.com/valyala/bytebufferpool v1.0.0 // indirect
-	github.com/yeqown/log v1.1.1 // indirect
 	golang.org/x/net v0.0.0-20220225172249-27dd8689420f // indirect
 	golang.org/x/text v0.3.7 // indirect
 	gopkg.in/inf.v0 v0.9.1 // indirect
