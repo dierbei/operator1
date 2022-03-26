@@ -3,6 +3,7 @@ module dierbei/operator-one
 go 1.17
 
 require (
+	github.com/gorilla/mux v1.8.0
 	github.com/valyala/fasthttp v1.34.0
 	github.com/yeqown/fasthttp-reverse-proxy/v2 v2.2.2
 	k8s.io/api v0.23.5
