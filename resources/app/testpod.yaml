@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: xltapp
+spec:
+  selector:
+    matchLabels:
+      app: xltapp
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: xltapp
+    spec:
+      nodeName: xiaolatiao1
+      containers:
+        - name: xltapp
+          image: alpine:3.12
+          imagePullPolicy: IfNotPresent
+          command: ["/app/app"]
+          volumeMounts:
+            - name: app
+              mountPath: /app
+          ports:
+            - containerPort: 8080
+              hostPort: 8086
+      volumes:
+        - name: app
+          hostPath:
+             path: /home/xiaolatiao/myweb

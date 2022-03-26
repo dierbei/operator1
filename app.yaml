@@ -5,25 +5,19 @@ ingress:
  - apiVersion: networking.k8s.io/v1
    kind: Ingress
    metadata:
-    name: ingress-myservicea
-    annotations:
-      jtthink.ingress.kubernetes.io/add-request-header: name=shenyi;age=19
-      jtthink.ingress.kubernetes.io/add-response-header: ret=ok
-      jtthink.ingress.kubernetes.io/rewrite-target: /$1
+     name: ingress-myservicea
+     annotations:
+       jtthink.ingress.kubernetes.io/add-response-header: ret=okabc
+       kubernetes.io/ingress.class: "jtthink"
    spec:
-    rules:
+     rules:
        - host: aabb.com
          http:
-          paths:
-            - path: /jtthink/{param:.*}
-              backend:
-                service:
-                  name: localhost
-                  port:
-                    number: 8080
-            - path: /baidu/{param:.*}
-              backend:
-                service:
-                  name: www.baidu.com
-                  port:
-                    number: 80
+           paths:
+             - path: /
+               pathType: Prefix
+               backend:
+                 service:
+                   name: xltapp.xiaolatiao.cn
+                   port:
+                     number: 8086
