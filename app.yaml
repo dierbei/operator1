@@ -1,0 +1,14 @@
+server:
+  port: 80
+
+ingress:
+  rules:
+    - http:
+        paths:
+          - path: /testpath
+            pathType: Prefix
+            backend:
+              service:
+                name: test
+                port:
+                  number: 80
