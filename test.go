@@ -8,7 +8,7 @@ import (
 	"github.com/gorilla/mux"
 )
 
-func main() {
+func maintest() {
 	r:=mux.NewRouter()
 
 	// 添加两个路由

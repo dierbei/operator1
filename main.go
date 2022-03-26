@@ -13,14 +13,17 @@ var jtthink = proxy.NewReverseProxy("www.jtthink.com")
 
 // ProxyHandler 处理器
 func ProxyHandler(ctx *fasthttp.RequestCtx) {
-	jtthink.ServeHTTP(ctx)
-
-	// 在处理之后进行请求头的修改
-	ctx.Response.Header.Add("myname", "xiaolatiao")
+	if getProxy := sysinit.GetRoute(ctx.Request); getProxy != nil {
+		getProxy.ServeHTTP(ctx)
+	} else {
+		ctx.Response.SetStatusCode(404)
+		ctx.Response.SetBodyString("404...")
+	}
 }
 
 func main() {
 	sysinit.InitConfig()
+
 
 	fasthttp.ListenAndServe(fmt.Sprintf(":%d", sysinit.SysConfig.Server.Port), ProxyHandler)
 }

@@ -5,10 +5,9 @@ ingress:
   rules:
     - http:
         paths:
-          - path: /testpath
-            pathType: Prefix
+          - path: /
             backend:
               service:
-                name: test
+                name: www.jtthink.com
                 port:
                   number: 80

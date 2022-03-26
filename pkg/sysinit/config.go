@@ -29,4 +29,5 @@ func InitConfig() {
 		log.Fatal(err)
 	}
 	fmt.Println(SysConfig.Ingress)
+	ParseRule()
 }
