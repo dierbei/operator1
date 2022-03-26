@@ -16,7 +16,7 @@ type Server struct {
 }
 type SysConfigStruct struct {
 	Server  Server
-	Ingress v1.IngressSpec
+	Ingress []v1.Ingress
 }
 
 func InitConfig() {

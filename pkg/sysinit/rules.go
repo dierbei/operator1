@@ -11,8 +11,6 @@ import (
 	v1 "k8s.io/api/networking/v1"
 )
 
-var MyRouter *mux.Router
-
 type ProxyHandler struct {
 	Proxy *proxy.ReverseProxy // proxy对象
 }
@@ -26,32 +24,21 @@ func init() {
 
 // ParseRule 解析配置文件中的rules
 func ParseRule() {
-	for _, rule := range SysConfig.Ingress.Rules {
-		for _, path := range rule.HTTP.Paths {
+	for _, ingress := range SysConfig.Ingress {
+		for _, rule := range ingress.Spec.Rules {
+			for _, path := range rule.HTTP.Paths {
+				//构建反代对象
+				rProxy := proxy.NewReverseProxy(fmt.Sprintf("%s:%d",
+					path.Backend.Service.Name,        // 服务名
+					path.Backend.Service.Port.Number, // 端口
+				))
 
-			//构建反代对象
-			rProxy := proxy.NewReverseProxy(fmt.Sprintf("%s:%d",
-				path.Backend.Service.Name,        // 服务名
-				path.Backend.Service.Port.Number, // 端口
-			))
-
-			// path绑定反代处理
-			if path.PathType != nil && *path.PathType == v1.PathTypeExact {
-				MyRouter.NewRoute().Path(path.Path).Methods(
-					"GET",
-					"POST",
-					"PUT",
-					"DELETE",
-					"OPTIONS",
-				).Handler(&ProxyHandler{Proxy: rProxy})
-			} else {
-				MyRouter.NewRoute().PathPrefix(path.Path).Methods(
-					"GET",
-					"POST",
-					"PUT",
-					"DELETE",
-					"OPTIONS",
-				).Handler(&ProxyHandler{Proxy: rProxy})
+				// path绑定反代处理
+				routeBud := NewRouteBuilder()
+				routeBud.
+					SetPath(path.Path, path.PathType != nil && *path.PathType == v1.PathTypeExact).
+					SetHost(rule.Host, rule.Host != "").
+					Build(&ProxyHandler{Proxy: rProxy})
 			}
 		}
 	}
@@ -64,6 +51,7 @@ func GetRoute(req fasthttp.Request) *proxy.ReverseProxy {
 	httpReq := &http.Request{
 		URL:    &url.URL{Path: string(req.URI().Path())}, // 请求路径path
 		Method: string(req.Header.Method()),              // 请求方法
+		Host:   string(req.Header.Host()),                // 请求地址 host
 	}
 
 	// 匹配到之后返回反代处理器

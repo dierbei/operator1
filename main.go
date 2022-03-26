@@ -24,6 +24,5 @@ func ProxyHandler(ctx *fasthttp.RequestCtx) {
 func main() {
 	sysinit.InitConfig()
 
-
 	fasthttp.ListenAndServe(fmt.Sprintf(":%d", sysinit.SysConfig.Server.Port), ProxyHandler)
 }
