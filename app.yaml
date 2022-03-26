@@ -11,13 +11,13 @@ ingress:
        kubernetes.io/ingress.class: "jtthink"
    spec:
      rules:
-       - host: aabb.com
+       - host: aabb.com # 本地hosts修改假域名
          http:
            paths:
              - path: /
                pathType: Prefix
                backend:
                  service:
-                   name: xltapp.xiaolatiao.cn
+                   name: xltapp.xiaolatiao.cn  # 云服务dns解析
                    port:
-                     number: 8086
+                     number: 8086 # 端口
