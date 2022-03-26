@@ -8,6 +8,7 @@ import (
 	"github.com/gorilla/mux"
 	"github.com/valyala/fasthttp"
 	"github.com/yeqown/fasthttp-reverse-proxy/v2"
+	v1 "k8s.io/api/networking/v1"
 )
 
 var MyRouter *mux.Router
@@ -34,14 +35,24 @@ func ParseRule() {
 				path.Backend.Service.Port.Number, // 端口
 			))
 
-			// path绑定反代处理器
-			MyRouter.NewRoute().Path(path.Path).Methods(
-				"GET",
-				"POST",
-				"PUT",
-				"DELETE",
-				"OPTIONS",
-			).Handler(&ProxyHandler{Proxy: rProxy})
+			// path绑定反代处理
+			if path.PathType != nil && *path.PathType == v1.PathTypeExact {
+				MyRouter.NewRoute().Path(path.Path).Methods(
+					"GET",
+					"POST",
+					"PUT",
+					"DELETE",
+					"OPTIONS",
+				).Handler(&ProxyHandler{Proxy: rProxy})
+			} else {
+				MyRouter.NewRoute().PathPrefix(path.Path).Methods(
+					"GET",
+					"POST",
+					"PUT",
+					"DELETE",
+					"OPTIONS",
+				).Handler(&ProxyHandler{Proxy: rProxy})
+			}
 		}
 	}
 }
